@@ -1,0 +1,3193 @@
+---
+title: " Rendimiento Academico 2020"
+author: "Claudio Rojas"
+date: "4/2/2021"
+output:
+  ioslides_presentation: default
+  beamer_presentation: default
+  powerpoint_presentation: default
+---
+
+```{r setup, warning=FALSE, message= FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(dslabs)
+library(gridExtra)
+library(tidyverse)
+library(ggplot2)
+library(ggthemes)
+library(stargazer)
+library(plotly)
+library(hrbrthemes)
+library(viridis)
+library(readxl)
+library(printr)
+library(knitr)
+library(modeest)
+library(palmerpenguins)
+library(skimr)
+library(dlookr)
+library(patchwork)
+library(GGally)
+library(kableExtra)
+
+```
+
+
+```{r Bases de datos usadas, ImportarDatos, warning=FALSE, message= FALSE, echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ <- read_excel("Base de Datos 2018 -2020 II .xlsx")
+
+Base_de_Datos_2018_2020_II_Con_Moda <- read_excel("Base de Datos 2018 -2020 II Con Moda.xlsx")
+
+Base_de_PSU_2017_2020_ <- read_excel("Base de  PSU 2017 -2020 .xlsx")
+
+primer_ciclo <- Base_de_Datos_2018_2020_II_ %>% filter(CURSO== c("1","2"))
+
+segundo_ciclo <- Base_de_Datos_2018_2020_II_ %>% filter(CURSO== c("3","4", "5","6"))
+
+tercer_ciclo <- Base_de_Datos_2018_2020_II_ %>% filter(CURSO== c("7","8", "9"))
+
+cuarto_ciclo <- Base_de_Datos_2018_2020_II_ %>% filter(CURSO== c("10","11", "12"))
+
+tercero_cuarto <- Base_de_Datos_2018_2020_II_ %>% filter(CURSO== c("11", "12"))
+
+df_Lenguaje_Total_2 <- Base_de_Datos_2018_2020_II_ %>%  filter (AÑO==c("2017", "2018", "2019", "2020")) %>% group_by(CURSO, AÑO, SEXO) %>% summarise( promedio=mean(LENGUAJE))
+
+df_Matematicas_Total <- Base_de_Datos_2018_2020_II_ %>%  filter (AÑO==c("2017", "2018", "2019", "2020")) %>% group_by(CURSO, AÑO, SEXO) %>% summarise( promedio=mean(MATEMATICAS))
+
+df_Promedio_2020 <- Base_de_Datos_2018_2020_II_ %>%  filter (AÑO== "2020") %>% group_by(CURSO) %>% summarise( promedio=mean(PROMEDIO))
+
+df_Promedio_Total <- Base_de_Datos_2018_2020_II_ %>%  filter (AÑO==c("2017", "2018", "2019", "2020")) %>% group_by(CURSO, AÑO, SEXO) %>% summarise( promediogeneral=mean(PROMEDIO))
+
+df_Ingles_Total <- Base_de_Datos_2018_2020_II_ %>%  filter (AÑO==c("2017", "2018", "2019", "2020")) %>% group_by(CURSO, AÑO, SEXO) %>% summarise( promedio=mean(INGLÉS))
+
+df_Historia_Total <- Base_de_Datos_2018_2020_II_ %>%  filter (AÑO==c("2017", "2018", "2019", "2020")) %>% group_by(CURSO, AÑO, SEXO) %>% summarise( promedio=mean(HISTORIA))
+
+df_Ciencias_Total <- Base_de_Datos_2018_2020_II_ %>%  filter (AÑO==c("2017", "2018", "2019", "2020")) %>% group_by(CURSO, AÑO, SEXO) %>% summarise( promedio=mean(CIENCIAS))
+
+
+df_Lenguaje_Total_2 <- Base_de_Datos_2018_2020_II_ %>%  filter (AÑO==c("2017", "2018", "2019", "2020")) %>% group_by(CURSO, AÑO, SEXO) %>% summarise( promedio=mean(LENGUAJE))
+
+df_Matematicas_Total <- Base_de_Datos_2018_2020_II_ %>%  filter (AÑO==c("2017", "2018", "2019", "2020")) %>% group_by(CURSO, AÑO, SEXO) %>% summarise( promedio=mean(MATEMATICAS))
+
+
+```
+
+## Datos Generales
+
+### Datos Generales en Tabla SKIM
+
+
+```{r Datos Generales en Tabla SKIM, results='hold', warning=FALSE, message= FALSE,echo=FALSE}
+skim (Base_de_Datos_2018_2020_II_)
+```
+
+### Datos Generales en Tabla SKIM por sexo
+
+
+```{r Datos Generales en Tabla SKIM por sexo, results='hold', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>% group_by(SEXO) %>% skim()
+```
+
+
+### Datos Generales en Tabla SKIM por Curso
+
+
+```{r Datos Generales en Tabla SKIM por Curso, results='hold', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>% group_by(CURSO) %>% skim()
+```
+
+## HISTOGRAMAS
+
+### Histograma Promedios Generales 2017 - 2020
+
+
+```{r Histograma Promedios Generales 2017 - 2020,   fig.cap="Elaboración Propia",  fig.show='hold', fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>% ggplot(aes(PROMEDIO)) +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+
+```
+
+### Histograma Promedios General Primer Ciclo 2017 - 2020
+
+```{r Histograma Promedios Generales Primer Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("1","2")) %>%  
+                                         ggplot(aes(PROMEDIO))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+
+### Histograma Promedios General Segundo Ciclo 2017 - 2020
+
+```{r Histograma Promedios Generales Segundo Ciclo 2017 - 2020, fig.show='hold',  fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("3","4","5","6")) %>%                                         ggplot(aes(PROMEDIO))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+
+### Histograma Promedios General Tercer Ciclo 2017 - 2020
+
+```{r Histograma Promedios Generales Tercer Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("7","8","9")) %>%  
+  ggplot(aes(PROMEDIO))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+
+### Histograma Promedios General Cuarto Ciclo 2017 - 2020
+
+```{r Histograma Promedios Generales Cuarto Ciclo 2017 - 2020, fig.show='hold', fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("10","11","12")) %>%  
+  ggplot(aes(PROMEDIO))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+<center>
+<h1>Histograma Promedios General Primer y Segundo Ciclo 2017 - 2020
+</center>
+
+
+```{r Histograma Promedios Generales I y II Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("1","2","3","4","5","6")) %>%  
+ggplot(aes(PROMEDIO))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios Generales Tercer y Cuarto Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios Generales III y IV  Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+##Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("7","8","9","10","11","12")) %>%  
+                                 ##ggplot(aes(PROMEDIO))  +
+                                         #geom_histogram() + 
+                                         #facet_grid(rows = "AÑO")
+```
+
+
+<center>
+<h1>Histograma Promedios de Lenguaje 2017 - 2020
+</center>
+
+```{r Histograma Promedios de Lenguaje 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>% ggplot(aes(LENGUAJE)) +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+<center>
+<h1>Histograma Promedios Lenguaje I Ciclo 2017 - 2020
+</center>
+
+```{r Histograma Promedios de Lenguaje I Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("1","2")) %>%  
+                                         ggplot(aes(LENGUAJE))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+
+<center>
+<h1>Histograma Promedios Lenguaje II Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios de Lenguaje II Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("3","4", "5", "6")) %>%  
+                                         ggplot(aes(LENGUAJE))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios Lenguaje III Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios de Lenguaje III Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("7","8", "9")) %>%  
+                                         ggplot(aes(LENGUAJE))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios Lenguaje IV Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios de Lenguaje IV Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("10","11","12")) %>%  
+                                         ggplot(aes(LENGUAJE))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+
+```
+
+<center>
+<h1>Histograma Promedios Lenguaje I y II Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios de Lenguaje I y II Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("1","2","3","4","5","6")) %>%  
+  ggplot(aes(LENGUAJE))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios Lenguaje III y IV Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios de Lenguaje III y IV Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("7","8","9","10","11","12")) %>%  
+                                 ggplot(aes(LENGUAJE))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios Matematicas 2017 - 2020
+</center>
+
+```{r Histograma Promedios Matematicas 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>% ggplot(aes(MATEMATICAS)) +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Matemáticas I Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios Matematicas I Ciclo  2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  
+  filter(CURSO==c("1","2")) %>%  
+  ggplot(aes(MATEMATICAS))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Matemáticas II Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios Matematicas II Ciclo  2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+                                       
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("3","4","5","6")) %>%                                  ggplot(aes(MATEMATICAS))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Matemáticas III Ciclo 2017 - 2020
+</center>
+
+```{r Histograma Promedios Matematicas III Ciclo  2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("7","8","9")) %>%  
+  ggplot(aes(MATEMATICAS))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Matemáticas IV Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios Matematicas IV Ciclo  2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("10","11","12")) %>%  
+  ggplot(aes(MATEMATICAS))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Matemáticas I - II Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios Matematicas I-II Ciclo  2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("1","2","3","4","5","6")) %>%  
+  ggplot(aes(MATEMATICAS))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Matemáticas III - IV Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios Matematicas III - IV Ciclo  2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("7","8","9","10","11","12")) %>%  
+                                 ggplot(aes(MATEMATICAS))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Historia 2017 - 2020
+</center>
+
+```{r Histograma Promedios de Historia 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>% ggplot(aes(HISTORIA)) +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Historia I Ciclo 2017 - 2020
+</center>
+
+```{r Histograma Promedios de Historia I Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("1","2")) %>%  
+                                         ggplot(aes(HISTORIA))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+
+<center>
+<h1>Histograma Promedios de Historia II Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios de Historia II Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+                                       
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("3","4","5","6")) %>%                                         ggplot(aes(HISTORIA))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Historia III Ciclo 2017 - 2020
+</center>
+
+```{r Histograma Promedios de Historia III Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("7","8","9")) %>%  
+  ggplot(aes(HISTORIA))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+
+<center>
+<h1>Histograma Promedios de Historia IV Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios de Historia IV Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("10","11","12")) %>%  
+  ggplot(aes(HISTORIA))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Historia I - II Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios de Historia I - II Ciclo  2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("1","2","3","4","5","6")) %>%  
+  ggplot(aes(HISTORIA))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Historia III - IV Ciclo 2017 - 2020
+</center>
+
+```{r Histograma Promedios de Historia III - IV Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("7","8","9","10","11","12")) %>%  
+                                 ggplot(aes(HISTORIA))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Ciencias 2017 - 2020
+</center>
+```{r Histograma Promedios de Ciencias 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>% ggplot(aes(CIENCIAS)) +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+
+```
+
+<center>
+<h1>Histograma Promedios de Ciencias I Ciclo 2017 - 2020
+</center>
+
+```{r Histograma Promedios de Ciencias I Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("1","2")) %>%  
+                                         ggplot(aes(CIENCIAS))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+
+<center>
+<h1>Histograma Promedios de Ciencias II Ciclo 2017 - 2020
+</center>
+
+```{r Histograma Promedios de Ciencias II Ciclo  2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("3","4","5","6")) %>%                                         ggplot(aes(CIENCIAS))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Ciencias III Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios de Ciencias III Ciclo  2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("7","8","9")) %>%  
+  ggplot(aes(CIENCIAS))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Ciencias IV Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios de Ciencias IV Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("10","11","12")) %>%  
+  ggplot(aes(CIENCIAS))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Ciencias I - II Ciclo 2017 - 2020
+</center>
+
+```{r Histograma Promedios de Ciencias I - II Ciclo  2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("1","2","3","4","5","6")) %>%  
+  ggplot(aes(CIENCIAS))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+
+<center>
+<h1>Histograma Promedios de Ciencias III - IV Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios de Ciencias III - IV Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+                                       
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("7","8","9","10","11","12")) %>%  
+                                 ggplot(aes(CIENCIAS))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+
+<center>
+<h1>Histograma Promedios de Inglés 2017 - 2020
+</center>
+```{r Histograma Promedios de Inglés 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>% ggplot(aes(INGLÉS)) +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+
+<center>
+<h1>Histograma Promedios de Inglés  I Ciclo 2017 - 2020
+</center>
+
+```{r Histograma Promedios de Inglés I Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE }
+
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("1","2")) %>%  
+                                         ggplot(aes(INGLÉS))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+
+```
+
+
+<center>
+<h1>Histograma Promedios de Inglés II Ciclo 2017 - 2020
+</center>
+
+```{r Histograma Promedios de Inglés II Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+                                       
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("3","4","5","6")) %>%                                           ggplot(aes(INGLÉS))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+<center>
+<h1>Histograma Promedios de Inglés III Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios de Inglés III Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("7","8","9")) %>%  
+  ggplot(aes(INGLÉS))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+
+<center>
+<h1>Histograma Promedios de Inglés IV Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios de Inglés IV Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("10","11","12")) %>%  
+  ggplot(aes(INGLÉS))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+
+<center>
+<h1>Histograma Promedios de Inglés I - II Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios de Inglés I-II Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("1","2","3","4","5","6")) %>%  
+  ggplot(aes(INGLÉS))  +
+  geom_histogram() + 
+  facet_grid(rows = "AÑO")
+```
+
+
+<center>
+<h1>Histograma Promedios de Inglés III-IV Ciclo 2017 - 2020
+</center>
+```{r Histograma Promedios de Inglés III - IV Ciclo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%  filter(CURSO==c("7","8","9","10","11","12")) %>%  
+                                 ggplot(aes(INGLÉS))  +
+                                         geom_histogram() + 
+                                         facet_grid(rows = "AÑO")
+```
+
+##
+<center>
+<h1>Tabla Promedios 1º básico a IV medio (2020)
+</center>
+```{r Summarise PG 2020, results='hold', warning=FALSE, message= FALSE,echo=FALSE}
+ Base_de_Datos_2018_2020_II_ %>% filter(AÑO==2020) %>%  group_by(CURSO) %>% summarise(promedio=mean(PROMEDIO),minimo=min(PROMEDIO), mediana= median(PROMEDIO), moda=mlv(PROMEDIO), maximo=max(PROMEDIO))
+
+
+###  si en moda le sumas method="mfv" muestra dos modas...
+```
+
+
+##
+<center>
+<h1>Distribución Promedio General 1º básico - IVº medio (2020)
+</center>
+```{r Distribución Promedios Generales 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+ filter(AÑO==2020)  %>% 
+  ggplot( aes(x=CURSO, y=PROMEDIO, group=CURSO)) +
+  geom_boxplot(outlier.colour = "green")  +
+  theme_ipsum() +
+  theme(
+    legend.position="bottom",
+    plot.title = element_text(size=9,hjust = 0.5 ))+
+  ggtitle("Distribución Promedios Generales 2020") +
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  stat_summary(fun=mlv, geom="point", shape=18,
+              size=3, color="orange", method= "mfv")+
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(1, 12, 1)) +
+  xlab("Niveles") +
+  ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+```
+
+##
+<center>
+<h1>Tendencia Promedio General 1º básico - IVº medio (2020)
+</center>
+
+```{r Tendencia Distribución Promedios Generales 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+df_Promedio_2020 %>% 
+  ggplot( ) +
+  geom_point( aes(x=as.factor(CURSO), y=promedio, col=CURSO)) +
+  geom_smooth(aes(x=CURSO, y=promedio))+
+  theme_ipsum() +
+ theme(
+    legend.position="none",
+    plot.title = element_text(size=9, hjust = 0.5)) +
+  ggtitle("Tendencia Distribución Promedios Generales 2020") +
+  ###theme(plot.title = element_text(hjust = 0.5)) +
+  xlab("Niveles") +
+    ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0)))
+
+
+```
+
+##
+<center>
+<h1>Tendencia Promedio General 1º básico - IVº medio (2017 - 2020)
+</center>
+
+```{r Tendencia PG 1º básico - IVº medio (2017 - 2020), fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+df_Promedio_Total %>% 
+  ggplot( ) +
+  geom_point( aes(x=as.factor(CURSO), y=promediogeneral, group= AÑO, col= AÑO)) +
+  geom_smooth(aes(x=CURSO, y=promediogeneral))+
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  theme_ipsum() +
+   ggtitle("Tendencia Promedio General 1º básico - IVº medio (2017 - 2020)") +
+  theme(
+    legend.position="bottom",
+    plot.title = element_text(size=9, hjust = 0.5)) +
+  xlab("NIVELES") +
+   theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  ylab("PROMEDIO") +
+ theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0)))
+##theme(plot.title = element_text()) +
+##scale_x_continuous(breaks = seq(1, 12, 1)) +
+##scale_fill_manual(values = c("green", "red", "orange", "blue"))+
+
+```
+
+
+##
+<center>
+<h1> Promedio General 1º básico - IVº medio (2019)
+</center>
+
+```{r Distribución PG 2019, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_%>%
+ filter(AÑO==2019)  %>% 
+  ggplot( aes(x=CURSO, y=PROMEDIO, group=CURSO)) +
+  geom_boxplot(outlier.colour = "green")  +
+  theme_ipsum() +
+  ggtitle("Distribución Promedios Generales 2019") +
+  theme(
+    legend.position="bottom",
+    plot.title = element_text(size=9,hjust = 0.5 ))+
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(1, 12, 1)) +
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+   stat_summary(fun=mlv, geom="point", shape=18,
+               size=3, color="orange", method="mfv") +
+  xlab("Niveles") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    ylab("Promedios") +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+
+##
+
+```{r Distribución Promedios Generales 2018, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+ filter(AÑO==2018)  %>% 
+  ggplot( aes(x=CURSO, y=PROMEDIO, group=CURSO)) +
+  geom_boxplot(outlier.colour = "green")  +
+  theme_ipsum() +
+   ggtitle("Distribución Promedios Generales 2018") +
+  theme(
+    legend.position="bottom",
+    plot.title = element_text(size=9,hjust = 0.5 )) +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(1, 12, 1)) +
+  ###geom_point( alpha = 0.5) +
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  stat_summary(fun=mlv, geom="point", shape=18,
+               size=3, color="orange") +
+  xlab("Niveles") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    ylab("Promedios") +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+```
+
+##
+
+
+
+##
+Si uni mira los resultados por asignaturas, se aprecia lo siguiente:
+a) Lenguaje: el promedio se mueve entre un 5,8 (8º y IVº) y 6,6 (4º básico). A pesar de ello, preocupan los resultados de 8º básico por la amplia diotribición de sus resultados: de menos 4 a 7,0 y de sexto, por tener una situación similar, ya que abarca desde 4,5 a 7.0.
+b) Matemáticas: el promedio en todos los niveles es superior a 5,5 y en el caso de 2,4, y 6º básico superior a 6.0.  Preocupan los resultados de II medio por la gran dispersión de los resultados y lo mismo 8º básico.
+c) Historia: 
+
+
+
+
+##
+<center>
+<h1>Distribución Promedios Generales 2020 POR SEXO (2020)
+</center>
+
+```{r Distribución PG 2020 por sexo y niveles, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+ filter(AÑO==2020)  %>% 
+  ggplot( aes(x=as.factor(CURSO), y=PROMEDIO, group=CURSO)) +
+  geom_boxplot(outlier.colour = "green")  +
+  theme_ipsum() +
+ theme(
+    legend.position="bottom",
+    plot.title = element_text(size=9,hjust = 0.5 )) +
+  ggtitle("Distribución PG 2020 por sexo y niveles") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+    stat_summary(fun=mlv, geom="point", shape=18,
+               size=3, color="orange", method= "mfv") +
+ xlab("Niveles") +
+    ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+
+##
+<center>
+<h1>Distribución Promedio Lenguaje  1º básico - IVº medio (2020)
+</center>
+
+```{r Distribución Promedio Lenguaje 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2020) %>% 
+  ggplot( aes(x=as.factor(CURSO), y=LENGUAJE, group=CURSO)) +
+  geom_boxplot(outlier.colour = "green") +
+   scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  theme_ipsum() +
+theme(
+    legend.position="bottom",
+    plot.title = element_text(size=9,hjust = 0.5 ))+
+  ggtitle("Distribución Promedio Lenguaje 2020") +
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  stat_summary(fun=mlv, geom="point", shape=18,
+               size=3, color="orange", method= "mfv") +
+ xlab("Niveles") +
+    ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+  ## theme(legend.position="",
+   ## plot.title = element_text(size=11)) +
+ ###geom_point(alpha = 0.5) +
+```
+
+
+## 
+<center>
+<h1>Distribución Promedio Matemáticas 1º básico - IVº medio (2020)
+</center>
+
+```{r Distribución Promedio Matemáticas 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2020) %>% 
+  ggplot( aes(x=as.factor(CURSO), y=MATEMATICAS, group=CURSO)) +
+  geom_boxplot(outlier.colour = "green") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  theme_ipsum() +
+  ggtitle("Distribución Promedio Matemáticas 2020") +
+ theme(
+    legend.position="bottom",
+    plot.title = element_text(size=9,hjust = 0.5 ))+
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+   stat_summary(fun=mlv, geom="point", shape=18,
+               size=3, color="orange", method="mfv") +
+ xlab("Niveles") +
+    ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+
+##
+<center>
+<h1>Distribución Promedio Historia 1º básico - IVº medio (2020)
+</center>
+
+```{r Distribución Promedios Historia 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2020) %>% 
+  ggplot( aes(x=as.factor(CURSO), y=HISTORIA, group=CURSO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  ggtitle("Distribución Promedios Historia 2020") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  ###geom_point(alpha = 0.5) +
+  theme(
+    legend.position="bottom",
+    plot.title = element_text(size=9,hjust = 0.5 ))+
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+   stat_summary(fun=mlv, geom="point", shape=18,
+               size=3, color="orange", method="mfv") +
+  xlab("Niveles") +
+    ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+##
+<center>
+<h1>tendencia Distribución Promedio Historia 1º básico - IVº medio (020)
+</center>
+
+```{r Comparación Tendencia Promedio Historia por año , fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+df_Historia_Total %>% 
+  ggplot( aes(x=as.factor(CURSO), y=promedio, group= AÑO, col=AÑO)) +
+  geom_point() +
+  stat_smooth(se=FALSE)+
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  theme_ipsum() +
+  ggtitle("Comparación Tendencia Promedio Historia por año") +
+  theme(
+    legend.position="bottom",
+    plot.title = element_text(size=9,hjust = 0.5 ))+
+  xlab("Niveles") +
+    ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+
+```
+
+<center>
+<h1>tendencia  Promedio Historia 1º básico - IVº medio (2017-2020)
+</center>
+
+```{r Tendencia General Promedio Historia 2017-2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+df_Historia_Total %>% 
+  ggplot() +
+  geom_point(aes(x=as.factor(CURSO), y=promedio, col=AÑO)) +
+  geom_smooth(aes(x=CURSO, y=promedio))+
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  theme_ipsum() +
+  ggtitle("Tendencia General Promedio Historia 2017-2020") +
+  theme(
+    legend.position="right",
+    plot.title = element_text(size=9,hjust = 0.5 ))+
+  xlab("Niveles") +
+    ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+
+```
+
+##
+<center>
+<h1>Distribución Promedio Ciencias 1º básico - IVº medio (020)
+</center>
+
+```{r Distribución Promedio Ciencias 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2020)%>% 
+  ggplot( aes(x=as.factor(CURSO), y=CIENCIAS, group=CURSO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="bottom",
+    plot.title = element_text(size=9,hjust = 0.5 ))+
+  ggtitle("Distribución Promedio Ciencias 2020") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red")+
+   stat_summary(fun=mlv, geom="point", shape=18,
+               size=3, color="orange", method="mfv")+
+xlab("Niveles") +
+    ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+
+##
+<center>
+<h1>tendencia  Promedio Ciencias 1º básico - IVº medio (2017-2020)
+</center>
+
+```{r Tendencia Promedio Ciencias por año, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+df_Ciencias_Total %>% 
+  ggplot( aes(x=as.factor(CURSO), y=promedio, group= AÑO, col=AÑO)) +
+  geom_point() +
+  stat_smooth(se=FALSE)+
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  theme_ipsum() +
+  ggtitle("Tendencia Promedio Ciencias por año") +
+  theme(
+    legend.position="bottom",
+    plot.title = element_text(size=9,hjust = 0.5 ))+
+  xlab("Niveles") +
+    ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+
+```
+
+
+<center>
+<h1>tendencia  Promedio Ciencias 1º básico - IVº medio (020)
+</center>
+
+```{r Tendencia General Promedio Ciencias 2017-2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+df_Ciencias_Total %>% 
+  ggplot() +
+  geom_point( aes(x=as.factor(CURSO), y=promedio, col=AÑO)) +
+  geom_smooth(aes(x=CURSO, y=promedio))+
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  theme_ipsum() +
+  ggtitle("Tendencia General Promedio Ciencias 2017-2020") +
+ theme(
+    legend.position="right",
+    plot.title = element_text(size=9,hjust = 0.5 ))+ 
+  xlab("Niveles") +
+    ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+
+```
+
+##
+<center>
+<h1>Distribución Promedio Inglés 1º básico - IVº medio (020)
+</center>
+
+```{r Distribución Promedio Inglés 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2020) %>% 
+  ggplot( aes(x=as.factor(CURSO), y=INGLÉS, group=CURSO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  ggtitle("Distribución Promedio Inglés 2020") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  ##geom_point(alpha = 0.5) +
+theme(
+    legend.position="bottom",
+    plot.title = element_text(size=9,hjust = 0.5 ))+
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red")+
+    stat_summary(fun=mlv, geom="point", shape=18,
+               size=3, color="orange", method= "mfv")+
+xlab("Niveles") +
+    ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+
+## 
+<center>
+<h1>Tendencia Promedio Inglés por año
+</center>
+
+```{r Tendencia Promedio Inglés por año, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+df_Ingles_Total %>% 
+  ggplot( aes(x=as.factor(CURSO), y=promedio, group= AÑO, col=AÑO)) +
+  geom_point() +
+  stat_smooth(se=FALSE)+
+  theme_ipsum() +
+  ggtitle("Tendencia Promedio Inglés por año") +
+  theme(
+    legend.position="bottom",
+    plot.title = element_text(size=9,hjust = 0.5 ))+
+xlab("Niveles") +
+    ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+
+```
+
+
+## 
+<center>
+<h1>Tendencia  General Promedio Inglés 2017 -2020
+</center>
+
+```{r Tendencia General Promedio Inglés 2017-2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+df_Ingles_Total %>% 
+  ggplot() +
+  geom_point( aes(x=as.factor(CURSO), y=promedio, col=AÑO)) +
+  geom_smooth(aes(x=CURSO, y=promedio))+
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  theme_ipsum() +
+  ggtitle("Tendencia General Promedio Inglés 2017-2020") +
+theme(
+    legend.position="right",
+    plot.title = element_text(size=9,hjust = 0.5 ))+
+ xlab("Niveles") +
+  ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+
+```
+
+## 
+<center>
+<h1>Distribución Promedio General 2º (2017-2020)
+</center>
+
+```{r Comparación Distribución PG 2º básico 2017-2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+ Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="2") %>%
+  ggplot( aes(x=AÑO , y=PROMEDIO, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=10, hjust = 0.5)) +
+  ggtitle("Comparación Distribución PG 2º básico 2017-2020") +
+  scale_fill_continuous(123,234,445) +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+  ##theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+ xlab("Generación") +
+  ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+
+
+
+```
+## 
+<center>
+<h1>Distribución Promedio General 4º básico (2018-2020)
+</center>
+
+```{r Comparación Distribución PG 4º básico 2018 -2020", fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="4") %>%
+  ggplot( aes(x=AÑO , y=PROMEDIO, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=10, hjust = 0.5)) +
+  ggtitle("Comparación Distribución PG 4º básico 2018 -2020") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+  ##theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+xlab("Generación") +
+  ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+
+
+## 
+<center>
+<h1>Distribución Promedio General 6º  básico (2017-2020) 
+</center>
+
+```{r Comparación Distribución PG 6º básico 2017-2020, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot( aes(x=AÑO , y=PROMEDIO, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11, hjust = 0.5)) + 
+  ggtitle("Comparación Distribución PG 6º básico 2017-2020 ") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+  ###theme(plot.title = element_text(hjust = 0.5)) +
+   stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+xlab("Generación") +
+  ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+```
+ ##
+<center>
+<h1>Distribución Promedio General 8º básico (2017-2020)
+</center>
+ 
+```{r Comparación Distribución PG 8º básico 2017-2020, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="8") %>%
+  ggplot( aes(x=AÑO , y=PROMEDIO, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11, hjust = 0.5)) + 
+  ggtitle("Comparación Distribución PG 8º básico 2017-2020 ") +
+ xlab("Generación") +
+  ylab("Promedios") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+  ##theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+```
+ 
+ 
+ 
+##
+<center>
+<h1>Distribución Promedio General IIº medio (2018-2020)
+</center>
+
+```{r Comparación Distribución PG IIº medio (2018-2020), fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="10") %>%
+  ggplot( aes(x=AÑO , y=PROMEDIO, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11, hjust = 0.5)) + 
+  ggtitle("Comparación Distribución PG IIº medio (2018-2020)") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+  ###theme(plot.title = element_text(hjust = 0.5)) +
+   stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+    xlab("Generación") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+   ylab("Promedios") +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+## 
+<center>
+<h1>Comparación Distribución PG IVº medio (2017-2020)
+</center>
+
+```{r Comparación Distribución PG IVº medio (2017-2020), fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="12") %>%
+  ggplot( aes(x=AÑO , y=PROMEDIO, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11, hjust = 0.5)) + 
+  ggtitle("Comparación Distribución PG IVº medio (2017-2020)") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+ xlab("Generación") +
+  ylab("Promedios") +
+##theme(plot.title = element_text(hjust = 0.5)) +
+   stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+```
+
+
+## 
+<center>
+<h1>Gráfica de  Correlaciones por Sexo y Asignaturas
+</center>
+```{r Gráfica de  Correlaciones por Sexo y Asignaturas, results='hold', warning=FALSE, message= FALSE,echo=FALSE}
+ggpairs(
+  data = Base_de_Datos_2018_2020_II_ %>% 
+    select(SEXO,LENGUAJE, MATEMATICAS,HISTORIA, INGLÉS, CIENCIAS,
+           PROMEDIO),
+  mapping = aes(color = SEXO, alpha = 0.5))
+  ###, 
+  ###lower = list(continuous = my_fn))
+
+```
+
+##  
+<center>
+<h1>Gráfica de Correlaciones por Sexo y Asignaturas año 2018
+</center>
+
+```{r Gráfica de  Correlaciones por Sexo y Asignaturas año 2018, results='hold', warning=FALSE, message= FALSE,echo=FALSE }
+ggpairs(
+  data = Base_de_Datos_2018_2020_II_ %>% filter(AÑO=="2018") %>% 
+    select(SEXO,LENGUAJE, MATEMATICAS, HISTORIA, INGLÉS,
+           PROMEDIO),
+  mapping = aes(color = SEXO, alpha = 0.5))
+  ###lower = list(continuous = my_fn))
+
+```
+
+
+<center>
+<h1>Histograma Promedios Generales por sexo
+</center>
+
+```{r Histograma Promedios Generales por SEXO, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>% ggplot(aes(PROMEDIO)) +
+  geom_histogram() + 
+  facet_grid(rows = "SEXO")
+
+```
+
+<center>
+<h1>Histograma Promedios Lenguaje por sexo 2017 - 2020
+</center>
+```{r Histograma Promedios Lenguaje por sexo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>% ggplot(aes(LENGUAJE)) +
+  geom_histogram() + 
+  facet_grid(rows = "SEXO")
+```
+
+<center>
+<h1>Histograma Promedios Matemáticas por sexo 2017 - 2020
+</center>
+```{r Histograma Promedios Matemáticas por sexo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>% ggplot(aes(MATEMATICAS)) +
+  geom_histogram() + 
+  facet_grid(rows = "SEXO")
+
+```
+<center>
+<h1>Histograma Promedios Historia por sexo 2017 - 2020
+</center>
+
+```{r Histograma Promedios Historia por sexo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>% ggplot(aes(HISTORIA)) +
+  geom_histogram() + 
+  facet_grid(rows = "SEXO")
+
+```
+<center>
+<h1>Histograma Promedios Ciencias por sexo 2017 - 2020
+</center>
+```{r Histograma Promedios Ciencias por sexo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>% ggplot(aes(CIENCIAS)) +
+  geom_histogram() + 
+  facet_grid(rows = "SEXO")
+
+```
+
+<center>
+<h1>Histograma Promedios Inglés por sexo 2017 - 2020
+</center>
+
+```{r Histograma Promedios Inglés por sexo 2017 - 2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>% ggplot(aes(INGLÉS)) +
+  geom_histogram() + 
+  facet_grid(rows = "SEXO")
+
+```
+
+## 
+<center>
+<h1>Comparación Distribución PG 2020 por sexo y niveles
+</center>
+
+```{r Comparación Distribución PG 2020 por sexo y niveles, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2020) %>% 
+  ggplot( aes(x=as.factor(CURSO), y=PROMEDIO, group=CURSO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11,hjust = 0.5 )
+  ) +
+  ggtitle("Comparación distribución PG 2020 por sexo y niveles") +
+  scale_y_continuous(limit=c(2.5,7)) + 
+  #geom_point(alpha = 0.5) +
+xlab("Generación") +
+  ylab("Promedios") +
+  ##theme(plot.title = element_text(hjust = 0.5)) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  facet_wrap(~SEXO)
+```
+<center>
+<h1>Tendencia Promedios Generales por sexo 2017-2020
+</center>
+
+```{r Comparación Tendencia Promedios Generales por sexo 2017-2020, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+df_Promedio_Total  %>% 
+  ggplot( ) +
+  geom_point( aes(x=as.factor(CURSO), y=promediogeneral, col=CURSO)) +
+  geom_smooth(aes(x=CURSO, y=promediogeneral))+
+  theme_ipsum() +
+  theme(legend.position="none",
+    plot.title = element_text(size=11 )) +
+  ggtitle("Comparación tendencia PG por sexo 2017-2020") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  xlab("Niveles") +
+  ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+
+
+```
+
+
+## 
+<center>
+<h1>Distribución Promedio Lenguaje por sexo (2020)
+</center>
+
+```{r Comparación Distribución Promedio Lenguaje 2020 por sexo, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2020) %>% 
+  ggplot( aes(x=as.factor(CURSO), y=LENGUAJE, group=CURSO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=9)
+  ) +
+  ggtitle("Comparación Distribución Promedio Lenguaje 2020 por sexo") +
+  scale_y_continuous(limit=c(2.5,7)) + 
+  #geom_point(alpha = 0.5) +
+  xlab("Niveles") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+##
+<center>
+<h1>Tendencia Distribución Promedio Lenguaje por sexo (2020)
+</center>
+```{r Comparación Tendencia Promedio Lenguaje por sexo y años, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+df_Lenguaje_Total_2 %>% 
+  ggplot( aes(x=as.factor(CURSO), y=promedio, group= AÑO, col=AÑO)) +
+  geom_point() +
+  stat_smooth(se=FALSE)+
+  theme_ipsum() +
+  ggtitle("Comparación Tendencia Promedio Lenguaje por sexo y años") +
+  theme(
+    plot.title = element_text(size=10)
+  ) + 
+  xlab("Niveles") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+
+```
+
+##
+<center>
+<h1>Comparaación Tendencia Promedio Lenguaje por sexo 2017-2020
+</center>
+
+```{r Comparación Tendencia Promedio Lenguaje por sexo 2017-2020, fig.show='hold', fig.height=4, fig.width=4, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+df_Lenguaje_Total_2 %>% 
+  ggplot() +
+  geom_point( aes(x=as.factor(CURSO), y=promedio, col=AÑO)) +
+  geom_smooth(aes(x=CURSO, y=promedio))+
+  theme_ipsum() +
+  ggtitle("Comparación Tendencia Lenguaje por sexo 2017-2020") +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=9)
+  ) + 
+xlab("Niveles") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+
+## 
+<center>
+<h1>Distribución Promedio Matematica por sexo (2020)
+</center>
+
+```{r Comparación Distribución Promedio Matemáticas 2020 por sexo y niveles, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2020) %>% 
+  ggplot( aes(x=as.factor(CURSO), y=MATEMATICAS, group=CURSO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("Comparación Distribución Promedio Matemáticas 2020 por sexo y niveles") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  #geom_point(alpha = 0.5) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+xlab("Niveles") +
+  ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+
+## 
+<center>
+<h1>Distribución Promedio Matematica por sexo (2020)
+</center>
+```{r Comparación Tendencia Matemáticas por sexo 2017-2020, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+df_Matematicas_Total %>% 
+  ggplot() +
+  geom_point( aes(x=as.factor(CURSO), y=promedio, col=AÑO)) +
+  geom_smooth(aes(x=CURSO, y=promedio))+
+  theme_ipsum() +
+  ggtitle("Comparación Tendencia Matemáticas por sexo 2017-2020") +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=9, hjust = 0.5)) + 
+xlab("Niveles") +
+  ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+
+```
+
+
+## 
+<center>
+<h1>Distribución Promedio Historia por sexo (2020)
+</center>
+
+```{r Comparación Distribución Promedio Historia 2020 por sexo y niveles, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2020) %>% 
+  ggplot( aes(x=as.factor(CURSO), y=HISTORIA, group=CURSO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("Comparación Distribución Promedio Historia 2020 por sexo y niveles") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  ##geom_point(alpha = 0.5) +
+  theme(
+    legend.position="none",
+    plot.title = element_text(hjust = 0.5)) +
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+xlab("Niveles") +
+  ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+## 
+<center>
+<h1>Comparación Tendencia Promedio Historia por sexo, niveles y año
+</center>
+```{r Comparación Tendencia Promedio Historia por sexo, niveles y año, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+df_Historia_Total %>% 
+  ggplot( aes(x=as.factor(CURSO), y=promedio, group= AÑO, col=AÑO)) +
+  geom_point() +
+  stat_smooth(se=FALSE)+
+  theme_ipsum() +
+  ggtitle("Comparación Tendencia Promedio Historia por sexo, niveles y año") +
+  theme( 
+    legend.position="none",
+    plot.title = element_text(size=10)
+  ) + 
+  xlab("Niveles") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+
+
+```
+
+
+## 
+<center>
+<h1>Comparación Tendencia General Promedio Historia por sexo 2017-2020
+</center>
+
+```{r Comparación Tendencia General Promedio Historia por sexo 2017-2020, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+df_Historia_Total %>% 
+  ggplot() +
+  geom_point( aes(x=as.factor(CURSO), y=promedio, col=AÑO)) +
+  geom_smooth(aes(x=CURSO, y=promedio))+
+  theme_ipsum() +
+  ggtitle("Comparación Tendencia General Promedio Historia por sexo 2017-2020") +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=10)
+  ) + 
+ xlab("Niveles") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+
+```
+
+
+## 
+<center>
+<h1>Comparación Distribución Promedio Ciencias 2020 por sexo y niveles
+</center>
+
+```{r Comparación Distribución Promedio Ciencias 2020 por sexo y niveles, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2020) %>% 
+  ggplot( aes(x=as.factor(CURSO), y=CIENCIAS, group=CURSO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("Comparación Distribución Promedio Ciencias 2020 por sexo y niveles") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  #geom_point(alpha = 0.5) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+xlab("Niveles") +
+  ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+
+## 
+<center>
+<h1>Tendencia Distribución Promedio Ciencias por sexo por año (2020)
+</center>
+
+```{r Comparación Tendencia Promedio Ciencias por sexo y año, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+df_Ciencias_Total %>% 
+  ggplot( aes(x=as.factor(CURSO), y=promedio, group= AÑO, col=AÑO)) +
+  geom_point() +
+  stat_smooth(se=FALSE)+
+  theme_ipsum() +
+  ggtitle("Comparación Tendencia Promedio Ciencias por sexo y año") +
+  theme(
+    plot.title = element_text(size=10)
+  ) + 
+ xlab("Niveles") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+
+```
+
+## 
+<center>
+<h1>omparación de Tendencia Promedio Ciencias por sexo 2017-2020
+</center>
+
+```{r Comparación de Tendencia Promedio Ciencias por sexo 2017-2020, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+df_Ciencias_Total %>% 
+  ggplot() +
+  geom_point( aes(x=as.factor(CURSO), y=promedio, col=AÑO)) +
+  geom_smooth(aes(x=CURSO, y=promedio))+
+  theme_ipsum() +
+  ggtitle("Comparación de Tendencia Promedio Ciencias por sexo 2017-2020") +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=10)
+  ) + 
+ xlab("Niveles") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+
+## 
+<center>
+<h1>Distribución Promedio Inglés por sexo y niveles (2020)
+</center>
+
+```{r Compración de la Distribución Promedio Inglés por sexo y niveles 2020, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2020) %>% 
+  ggplot( aes(x=as.factor(CURSO), y=INGLÉS, group=CURSO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("Compración de la Distribución Promedio Inglés por sexo y niveles") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  #geom_point(alpha = 0.5) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+xlab("Niveles") +
+  ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+
+## 
+<center>
+<h1>Tendencia Promedio Inglés por sexo (2017-2020)
+</center>
+
+```{r Comparación Tendencia Promedio Inglés por sexo y año, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+df_Ingles_Total %>% 
+  ggplot( aes(x=as.factor(CURSO), y=promedio, group= AÑO, col=AÑO)) +
+  geom_point() +
+  stat_smooth(se=FALSE)+
+  theme_ipsum() +
+  ggtitle(" Comparación Tendencia Promedio Inglés por sexo y año") +
+  theme(
+    plot.title = element_text(size=10)
+  ) + 
+  xlab("Niveles") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+
+```
+
+## 
+<center>
+<h1>Tendencia General Promedio Inglés por sexo (2017-2020)
+</center>
+
+```{r Tendencia General Promedio Inglés por sexo 2017-2020, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+df_Ingles_Total %>% 
+ggplot() +
+  geom_point( aes(x=as.factor(CURSO), y=promedio, col=AÑO)) +
+  geom_smooth(aes(x=CURSO, y=promedio))+
+  theme_ipsum() +
+  ggtitle("Tendencia General Promedio Inglés por sexo 2017-2020") +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=10)
+  ) + 
+ xlab("Niveles") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+
+## 
+<center>
+<h1>Distribución Promedio Lenguaje 2º básico por sexo (2018-2020)
+</center>
+
+```{r Distribución Promedio Lenguaje 2º básico por sexo y año, fig.show='hold', fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+ 
+ Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="2") %>%
+  ggplot( aes(x=AÑO , y=LENGUAJE, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("Distribución Promedio Lenguaje 2º básico por sexo (2017-2020)") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  facet_wrap(~SEXO) +
+ xlab("Niveles") +
+  ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+ 
+```
+
+## 
+<center>
+<h1>Distribución Promedio Matemáticas 2º básico por sexo (2018-2020)
+</center>
+
+```{r Distribución Promedio Matemáticas 2º básico por sexo y año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="2")%>%
+  ggplot( aes(x=AÑO , y=MATEMATICAS, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  )  +
+  ggtitle("Distribución Promedio Matemáticas 2º básico por sexo (2017-2020)") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+   xlab("Generación") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+               width = 0.2) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO) 
+```
+
+
+## 
+<center>
+<h1>Distribución Promedio Lenguaje 4º básico por sexo (2018-2020)
+</center>
+
+```{r Distribución Promedio Lenguaje 4º básico por sexo y año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="4") %>%
+  ggplot( aes(x=AÑO , y=LENGUAJE, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  )  +
+  ggtitle("Distribución Promedio Lenguaje 4º básico por sexo (2017-2020)") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2018, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+ xlab("Generación") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO) 
+```
+
+## 
+<center>
+<h1> Distribución Promedio Matemáticas 4º básico por sexo (2018-2020)
+</center>
+
+```{r Distribución Promedio Matemáticas 4º básico por sexo y año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="4") %>%
+  ggplot( aes(x=AÑO , y=MATEMATICAS, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("Distribución Promedio Matemáticas 4º básico por sexo (2018-2020)") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+ xlab("Generación") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+
+## 
+<center>
+<h1>Distribución Promedio Lenguaje 6º básico por sexo (2018-2020)
+</center>
+ 
+```{r Distribución Promedio Lenguaje 6º básico por sexo y año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="6") %>%
+  ggplot( aes(x=AÑO , y=LENGUAJE, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("Distribución Promedio Lenguaje 6º básico por sexo (2017-2020)") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+   xlab("Generación") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+
+```
+
+## 
+<center>
+<h1>Distribución Promedio Matemáticas 6º básico por sexo
+</center>
+
+```{r Distribución Promedio Matemáticas 6º básico por sexo y año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="6") %>%
+  ggplot( aes(x=AÑO , y=MATEMATICAS, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("Distribución Promedio Matemáticas 6º básico por sexo (2017-2020)") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+   xlab("Generación") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+
+```
+
+## 
+<center>
+<h1>Distribución Promedio Lenguaje 8º básico por sexo (2017-2020)
+</center>
+
+```{r Distribución Promedio Lenguaje 8º básico por sexo y año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="8") %>%
+  ggplot( aes(x=AÑO , y=LENGUAJE, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("Distribución Promedio Lenguaje 8º básico por sexo (2017-2020)") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+   xlab("Generación") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+
+## 
+<center>
+<h1>Distribución Promedio Matemáticas 8º básico por sexo
+</center>
+
+```{r Distribución Promedio Matemáticas 8º básico por sexo y año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="8") %>%
+  ggplot( aes(x=AÑO , y=MATEMATICAS, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("Distribución Promedio Matemáticas 8º básico por sexo (2017-2020)") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+  xlab("Generación") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+##
+<center>
+<h1>Distribución Promedio Lenguaje IIº medio  por sexo
+</center>
+ 
+
+```{r Distribución Promedio Lenguaje IIº medio por sexo y año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="10") %>%
+  ggplot( aes(x=AÑO , y=LENGUAJE, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("Distribución Promedio Lenguaje IIº medio  por sexo (2018-2020)") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+  xlab("Generación") +
+  ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+
+##
+<center>
+<h1>Distribución Promedio  Matemáticas IIº medio  por sexo (2018 -2020)
+</center>
+```{r Distribución Promedio Matemáticas IIº medio por sexo y año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="10") %>%
+  ggplot( aes(x=AÑO , y=MATEMATICAS, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_bw() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("Distribución Promedio Matemáticas IIº medio  por sexo (2018-2020)") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2018, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  xlab("Generación") +
+  ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO) 
+
+```
+##  
+<center>
+<h1>DISTRIBUCIÓN PROMEDIO LENGUAJE IVº MEDIO 2017 - 2020 
+</center>
+
+```{r Distribución Promedio Lenguaje por sexo y año IV medio, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="12") %>%
+  ggplot( aes(x=AÑO , y=LENGUAJE, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_bw() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("Distribución Promedio Lenguaje por sexo (2017-2020)") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+ xlab("Generación") +
+  ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO) 
+
+```
+
+
+##  
+<center>
+<h1>DISTRIBUCIÓN PROMEDIO MATEMATICAS IVº MEDIO 2017 - 2020
+</center>
+
+```{r Distribución Promedio Matemáticas por sexo y año IV medio, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO=="12") %>%
+  ggplot( aes(x=AÑO , y=MATEMATICAS, group= AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_bw() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("Distribución Promedio Matemáticas por sexo IV medio (2017-2020)") +
+  scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+ xlab("Generación") +
+  ylab("Promedios") +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO) 
+
+```
+
+
+##  
+<center>
+<h1>DISTRIBUCIÓN PROMEDIO PSU 2017 - 2020
+</center>
+
+```{r Distribución Promedio PSU 2017-2020, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_PSU_2017_2020_ %>%
+    ggplot( aes(x=AÑO , y=PSU, group= AÑO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle(" Distribución Promedio PSU 2017-2020 ") +
+    scale_y_continuous(breaks = seq(250, 850, 50)) +
+    scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+    ##geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    xlab("Generación") +
+    ylab("Puntajes") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+
+
+##  
+<center>
+<h1>DISTRIBUCIÓN PROMEDIO LENGUAJE 2017 - 2020
+</center>
+
+```{r Distribución Lenguaje 2017 - 2020, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_PSU_2017_2020_ %>%
+    ggplot( aes(x=AÑO , y=Lenguaje, group= AÑO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle(" DISTRIBUCIÓN PSU LENGUAJE 2017-2020 ") +
+    xlab("Generación") +
+    ylab("Puntajes") +
+    scale_y_continuous(breaks = seq(250, 850, 50)) +
+    scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+
+##  
+<center>
+<h1>DISTRIBUCIÓN PSU MATEMATICA 2017 - 2020
+</center>
+```{r Distribución Matemáticas 2017 - 2020, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_PSU_2017_2020_ %>%
+    ggplot( aes(x=AÑO , y=Matematicas, group= AÑO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle(" DISTRIBUCIÓN PSU MATEMATICA 2017-2020 ") +
+    xlab("Generación") +
+    ylab("Puntajes") +
+    scale_y_continuous(breaks = seq(250, 850, 50)) +
+    scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+##  
+<center>
+<h1>Comparación III vs IVº medio
+</center>
+
+```{r Comparación III vs IVº medio 2017 -2020, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+tercero_cuarto %>%
+  ggplot( aes(x=AÑO, y=PROMEDIO, group=AÑO)) +
+  geom_boxplot(outlier.colour = "green") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("Comparación Tercero vs Cuarto Medio") +
+  scale_y_continuous(limit=c(5,7, 0.5)) +
+  scale_x_continuous(breaks = seq(2017, 2020, 1)) +
+  #geom_point(alpha = 0.5) +
+  xlab("Generación") +
+    ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5))+
+ stat_summary(fun=mean, geom="point", shape=18,
+               size=3, color="red") +
+  stat_boxplot(geom = "errorbar",     
+               width = 0.5) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~CURSO)
+
+```
+##  
+<center>
+<h1>Tendencia Promedio Lenguaje por año
+</center>
+
+```{r Tendencia Promedio Lenguaje por año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+df_Lenguaje_Total_2 %>% 
+  ggplot( aes(x=as.factor(CURSO), y=promedio, group= AÑO, col=AÑO)) +
+  geom_point() +
+  stat_smooth(se=FALSE)+
+  theme_ipsum() +
+  ggtitle(" Tendencia Promedio Lenguaje por año") +
+  theme(
+    plot.title = element_text(size=10)
+  ) + 
+   xlab("Niveles") +
+    ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+```
+
+
+##  
+<center>
+<h1>Tendencia Promedio Lenguaje 2017-2020
+</center>
+```{r Tendencia Promedio Lenguaje 2017-2020, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+df_Lenguaje_Total_2 %>% 
+  ggplot() +
+  geom_point( aes(x=as.factor(CURSO), y=promedio, col=AÑO)) +
+  geom_smooth(aes(x=CURSO, y=promedio))+
+  theme_ipsum() +
+  ggtitle("Tendencia Promedio Lenguaje 2017-2020") +
+  theme(
+    plot.title = element_text(size=10)
+  ) + 
+ xlab("Niveles") +
+    ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+
+```
+
+
+##  
+<center>
+<h1>Promedio Lenguaje 2020 por niveles
+</center>
+
+```{r Promedio Lenguaje 2020 por niveles, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2020) %>%
+    ggplot( aes(x=CURSO , y=LENGUAJE, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle(" Promedio Lenguaje 2020") +
+   xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+```
+
+##  
+<center>
+<h1>Promedio Lenguaje 2019
+</center>
+
+```{r Promedio Lenguaje 2019 por niveles, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2019) %>%
+    ggplot( aes(x=CURSO , y=LENGUAJE, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle(" Promedio Lenguaje 2019") +
+   xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+
+##  
+<center>
+<h1>Promedio Lenguaje 2018 por niveles
+</center>
+
+```{r Promedio Lenguaje 2018 por niveles, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2018) %>%
+    ggplot( aes(x=CURSO , y=LENGUAJE, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle(" Promedio Lenguaje 2018") +
+   xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+
+##  
+<center>
+<h1>Promedio Lenguaje 2017 por niveles
+</center>
+
+```{r Promedio Lenguaje 2017 por niveles, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2017) %>%
+    ggplot( aes(x=CURSO , y=LENGUAJE, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle(" Promedio Lenguaje 2017") +
+     xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+
+
+##  
+<center>
+<h1>Promedio MATEMATICAS 2017 -  2020
+</center>
+```{rTendencia Promedio Matemáticas por año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+df_Matematicas_Total %>% 
+  ggplot( aes(x=as.factor(CURSO), y=promedio, group= AÑO, col=AÑO)) +
+  geom_point() +
+  stat_smooth(se=FALSE)+
+  theme_ipsum() +
+  ggtitle(" Tendencia Promedio Matemáticas por año") +
+  theme(
+    plot.title = element_text(size=10)
+  ) + 
+  xlab("Niveles") +
+    ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+ 
+
+
+```
+
+##  
+<center>
+<h1>Tendencia Promedio Matemáticas 2017-2020
+</center>
+
+```{r Tendencia Promedio Matemáticas 2017-2020, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+df_Matematicas_Total %>% 
+  ggplot() +
+  geom_point( aes(x=as.factor(CURSO), y=promedio, col=AÑO)) +
+  geom_smooth(aes(x=CURSO, y=promedio))+
+  theme_ipsum() +
+  ggtitle("Tendencia Promedio Matemáticas 2017-2020") +
+  theme(
+    plot.title = element_text(size=10)
+  ) + 
+ xlab("Niveles") +
+    ylab("Promedios") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+
+```
+
+
+##  
+<center>
+<h1>Promedio MATEMATICAS  2020
+</center>
+
+```{r Promedios Matematicas 2020 por niveles, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2020) %>%
+    ggplot( aes(x=CURSO , y=MATEMATICAS, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle(" Promedio Matemáticas 2020") +
+     xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+```
+
+##  
+<center>
+<h1>Promedio Matemáticas 2019
+</center>
+
+```{r Promedios Matematicas 2019 por niveles, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2019) %>%
+    ggplot( aes(x=CURSO , y=MATEMATICAS, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle(" Promedio Matemáticas 2019") +
+   xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+
+##  
+<center>
+<h1>Promedio Matemáticas 2018
+</center>
+
+```{r Promedios Matematicas 2018 por niveles, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2018) %>%
+    ggplot( aes(x=CURSO , y=MATEMATICAS, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle(" Promedio Matemáticas 2018") +
+    xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+
+##  
+<center>
+<h1>Promedio Matemáticas 2017
+</center>
+
+```{r Promedios Matematicas 2017 por curso, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(AÑO==2017) %>%
+    ggplot( aes(x=CURSO , y=MATEMATICAS, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle(" Promedio Matemáticas 2017") +
+   xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+```
+
+
+
+##  
+<center>
+<h1>Promedio Primer CIclo
+</center>
+
+```{r Comparación PG I Ciclo 2019-2020, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+a <- primer_ciclo %>%
+  filter(AÑO==2019) %>%
+    ggplot( aes(x=CURSO , y=PROMEDIO, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle("X Generales I Ciclo 2019") +
+    xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+b <- primer_ciclo %>%
+  filter(AÑO==2020) %>%
+    ggplot( aes(x=CURSO , y=PROMEDIO, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle("X Generales I Ciclo 2020") +
+    xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+grid.arrange(a, b, ncol = 2)
+```
+
+##  
+<center>
+<h1>Promedio Segundo CIclo
+</center>
+
+```{r Comparación PG II Ciclo 2019-2020, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+c<- segundo_ciclo %>%
+  filter(AÑO==2019) %>%
+    ggplot( aes(x=CURSO , y=PROMEDIO, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle("X Generales II Ciclo 2019") +
+    xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+d<- segundo_ciclo %>%
+  filter(AÑO==2020) %>%
+    ggplot( aes(x=CURSO , y=PROMEDIO, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle("X Generales II Ciclo 2020") +
+   xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+grid.arrange(c, d, ncol = 2)
+```
+
+##  
+<center>
+<h1>Promedio Tercer CIclo
+</center>
+
+```{r Comparación PG III Ciclo 2019-2020, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+e<- tercer_ciclo %>%
+  filter(AÑO==2019) %>%
+    ggplot( aes(x=CURSO , y=PROMEDIO, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle("X Generales III Ciclo 2019") +
+    xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+f<- tercer_ciclo %>%
+  filter(AÑO==2020) %>%
+    ggplot( aes(x=CURSO , y=PROMEDIO, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle("X Generales III Ciclo 2020") +
+    xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+grid.arrange(e, f, ncol = 2)
+```
+
+##  
+<center>
+<h1>Promedio Cuarto CIclo
+</center>
+
+```{r Comparación PG IV Ciclo 2019-2020, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+g<- cuarto_ciclo %>%
+  filter(AÑO==2019) %>%
+    ggplot( aes(x=CURSO , y=PROMEDIO, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle("X General IV Ciclo 2019") +
+    xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+h <-  cuarto_ciclo %>%
+  filter(AÑO==2020) %>%
+    ggplot( aes(x=CURSO , y=PROMEDIO, group= CURSO)) +
+    geom_boxplot(outlier.colour = "green") +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) + 
+    ggtitle("X General IV Ciclo 2020") +
+   xlab("Niveles") +
+    ylab("Promedios") +
+    scale_y_continuous(breaks = seq(1, 7, 0.5)) +
+    scale_x_continuous(breaks = seq(1, 12, 1)) +
+    #geom_point(alpha = 0.5) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    stat_boxplot(geom = "errorbar",     
+                 width = 0.5) +
+    stat_summary(fun=mean, geom="point", shape=18,
+                 size=3, color="red") +
+    theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+    theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) 
+
+grid.arrange(g, h, ncol = 2)
+
+
+```
+
+
+##  
+<center>
+<h1>QQPLOT PROMEDIOS GENERALES 1
+</center>
+
+```{r QQ PG por año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot(aes(sample = scale(PROMEDIO))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ plot Promedios Generales")+
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~AÑO)
+```
+
+##  
+<center>
+<h1>QQPLOT PROMEDIOS GENERALES 2
+</center>
+
+```{r QQ PG por Sexo, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot(aes(sample = scale(PROMEDIO))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ plot Promedios Generales por sexo 2017 -2020 ")+
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+
+##  
+<center>
+<h1>QQPLOT PROMEDIOS GENERALES 3
+</center>
+
+```{r QQ PG por curso, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot(aes(sample = scale(PROMEDIO))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ plot Promedios Generales 2017 -2020")+
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~CURSO)
+```
+
+
+
+##  
+<center>
+<h1>QQPLOT LENGUAJE 1
+</center>
+```{r QQ Lenguaje por año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot(aes(sample = scale(LENGUAJE))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ Plot Promedio Lenguaje por año") +
+  theme(plot.title = element_text(size=10, hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~AÑO)
+```
+
+
+
+##  
+<center>
+<h1>QQPLOT LENGUAJE 2
+</center>
+
+```{r QQ Lenguaje por sexo, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  filter(CURSO==12) %>% 
+  ggplot(aes(sample = scale(LENGUAJE))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ Plot Promedio Lenguaje por sexo") +
+  theme(plot.title = element_text(size= 10, hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+
+```
+
+
+##  
+<center>
+<h1>QQPLOT LENGUAJE 3
+</center>
+
+```{r QQ Lenguaje por curso, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+
+Base_de_Datos_2018_2020_II_ %>%
+   ggplot(aes(sample = scale(LENGUAJE))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ Plot Promedios Lenguaje por curso") +
+  theme(plot.title = element_text(size= 10, hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~CURSO)
+```
+
+##  
+<center>
+<h1>QQPLOT MATEMATICAS 1
+</center>
+
+```{r QQ Matemáticas por año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot(aes(sample = scale(MATEMATICAS))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ Plot Promedios Matemáticas por año")+
+  theme(plot.title = element_text(size= 10, hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~AÑO)
+```
+
+
+##  
+<center>
+<h1>QQPLOT MATEMATICAS 2
+</center>
+```{r QQ Matemáticas por sexo, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot(aes(sample = scale(MATEMATICAS))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ Plot Promedios Matemáticas por sexo")+
+  theme(plot.title = element_text(size= 10, hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+
+
+##  
+<center>
+<h1>QQPLOT MATEMATICAS 3
+</center>
+
+```{r QQ Matemáticas por curso, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot(aes(sample = scale(MATEMATICAS))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ plot Promedios Matemáticas por Curso")+
+  theme(plot.title = element_text(size= 10, hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~CURSO)
+```
+
+
+##  
+<center>
+<h1>QQPLOT HISTORIA 1
+</center>
+```{r QQ Historia por año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot(aes(sample = scale(HISTORIA))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ Plot Promedios Historia por año") +
+  theme(plot.title = element_text(size= 10, hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~AÑO)
+```
+
+
+##  
+<center>
+<h1>QQPLOT HISTORIA 2
+</center>
+
+```{r QQ Historia por sexo, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot(aes(sample = scale(HISTORIA))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ Plot Promedio Historia por sexo") +
+  theme(plot.title = element_text(size= 10, hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+
+```
+
+
+##  
+<center>
+<h1>QQPLOT HISTORIA 3
+</center>
+```{r QQ Historia por curso, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot(aes(sample = scale(HISTORIA))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ Plot Promedio Historia por Curso") +
+  theme(plot.title = element_text(size= 10, hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~CURSO)
+```
+
+
+##  
+<center>
+<h1>QQPLOT CIENCIAS 1
+</center>
+
+```{r QQ Ciencias por Año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot(aes(sample = scale(CIENCIAS))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ Plot Promedios Ciencias por año") +
+  theme(plot.title = element_text(size= 10, hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~AÑO)
+```
+
+##  
+<center>
+<h1>QQPLOT CIENCIAS 2
+</center>
+
+```{r QQ Ciencias por sexo, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot(aes(sample = scale(CIENCIAS))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ Plot Promedios Ciencias por sexo ") +
+  theme(plot.title = element_text(size= 10, hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+
+##  
+<center>
+<h1>QQPLOT CIENCIAS 3
+</center>
+```{r QQ Ciencias curso, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot(aes(sample = scale(CIENCIAS))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ Plot Promedios Ciencias por curso") +
+  theme(plot.title = element_text(size= 10, hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~CURSO)
+```
+
+
+##  
+<center>
+<h1>QQPLOT INGLÉS 1
+</center>
+
+```{r QQ Inglés Año, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_%>%
+  ggplot(aes(sample = scale(INGLÉS))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ Plot Promedios Inglés por año")+
+  theme(plot.title = element_text(size= 10, hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~AÑO)
+```
+
+##  
+<center>
+<h1>QQPLOT INGLÉS 2
+</center>
+
+```{r QQ Inglés Sexo, fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot(aes(sample = scale(INGLÉS))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ Plot Promedios Inglés por sexo")+
+  theme(plot.title = element_text(size= 10, hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~SEXO)
+```
+
+##  
+<center>
+<h1>QQPLOT INGLÉS 3
+</center>
+
+```{r QQ Inglés Cursos,  fig.height=5, fig.width=5, fig.align='center', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>%
+  ggplot(aes(sample = scale(INGLÉS))) +
+  geom_qq(colour= "red") +
+  geom_abline() +
+  ggtitle("QQ Plot Promedios Inglés por curso")+
+  theme(plot.title = element_text(size= 10, hjust = 0.5)) +
+  theme(axis.title.x = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  theme(axis.title.y = element_text(face="bold", hjust=0.5, colour="black", size=rel(1.0))) +
+  facet_wrap(~CURSO)
+```
+##  
+<center>
+<h1> Tabla Resumen Promedios Generales 2020
+</center>
+
+```{r summarise PG, results='hold', warning=FALSE, message= FALSE,echo=FALSE}
+Base_de_Datos_2018_2020_II_ %>% filter(AÑO==2020) %>%  group_by( CURSO) %>% summarise(Promedio=mean(PROMEDIO),NMínima=min(PROMEDIO), Mediana= median(PROMEDIO),  NMáximo=max(PROMEDIO), Moda=mlv(PROMEDIO, method="mfv"))
+
+
+
+```
+
+##  
+<center>
+<h1> Tabla Resumen Promedios Lenguaje 2020
+</center>
+```{r summarise Lenguaje, results='hold', warning=FALSE, message= FALSE,echo=FALSE}
+ Base_de_Datos_2018_2020_II_ %>% filter(AÑO==2020) %>%  group_by( CURSO) %>% summarise(Promedio=mean(LENGUAJE), NMínima=min(LENGUAJE), Mediana= median(LENGUAJE), Moda=mlv(LENGUAJE, method="mfv"), NMáxima=max(LENGUAJE))
+
+
+```
+##  
+<center>
+<h1> Tabla Resumen Promedios Matematicas 2020
+</center>
+```{r summarise matemáticas, results='hold', warning=FALSE, message= FALSE,echo=FALSE}
+  Base_de_Datos_2018_2020_II_ %>% filter(AÑO==2020) %>%  group_by( CURSO) %>% summarise(Promedio=mean(MATEMATICAS),NMínima=min(MATEMATICAS), Mediana= median(MATEMATICAS), Moda=mlv(MATEMATICAS, method="mfv"), NMáxima=max(MATEMATICAS))
+
+
+
+```
+
+##  
+<center>
+<h1> Tabla Resumen Promedios Historia 2020
+</center>
+```{r summarise Historia, results='hold', warning=FALSE, message= FALSE,echo=FALSE, eval=FALSE}
+Base_de_Datos_2018_2020_II_Con_Moda  %>% filter(AÑO==2020) %>%  group_by(CURSO)  %>% summarise(Promedio=mean(HISTORIA), NMínima=min(HISTORIA), Mediana= median(HISTORIA), NMáxima=max(HISTORIA), Moda=mlv(HISTORIA, method="mfv"))
+
+
+```
+
+##  
+<center>
+<h1> Tabla Resumen Promedios Ciencias 2020
+</center>
+```{r Summarise Ciencias 2020, results='hold', warning=FALSE, message= FALSE,echo=FALSE} 
+ Base_de_Datos_2018_2020_II_Con_Moda %>% filter(AÑO==2020) %>%  group_by( CURSO) %>% summarise(Promedio=mean(CIENCIAS), NMínima=min(CIENCIAS), Mediana= median(CIENCIAS),  NMáxima=max(CIENCIAS), Moda=mlv(CIENCIAS, method="mfv"))
+```
+
+##  
+<center>
+<h1> Tabla Resumen Promedios Inglés 2020
+</center>
+```{r Summarise Inglés 2020, results='hold', warning=FALSE, message= FALSE,echo=FALSE}
+ Base_de_Datos_2018_2020_II_Con_Moda %>% filter(AÑO==2020) %>%  group_by( CURSO) %>% summarise(Promedio=mean(INGLÉS), NMínima=min(INGLÉS), Mediana= median(INGLÉS),  NMáxima=max(INGLÉS), Moda=mlv(INGLÉS, method="mfv"))
+
+
+```
+##
+<center>
+<h1>Tapply
+</center>
+```{r Uso de Tapply, results='asis', warning=FALSE, message= FALSE,echo=FALSE}
+tapply(Base_de_Datos_2018_2020_II_$PROMEDIO,Base_de_Datos_2018_2020_II_$MATEMATICAS,summary)
+
+```
+
+##  
+<center>
+<h1>Conclusiones
+</center>
