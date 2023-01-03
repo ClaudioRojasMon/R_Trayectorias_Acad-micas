@@ -1,4 +1,5 @@
-# R_Trayectorias_Academicas
+# Trayectorias Académicas
+
 Este repositorio da cuenta de un trabajo sobre las calificaciones de asignaturas troncales de las generaciones 2017 -2020 de un colegio particular pagado.
 
 Este proyecto se insertó en la discusión sobre: 
