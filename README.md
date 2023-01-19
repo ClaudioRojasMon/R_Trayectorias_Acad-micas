@@ -1,30 +1,17 @@
-[Logop](https://github.com/ClaudioRojasMon/Trayectorias_Academicas/blob/79b362cb03730b1e8f20d9116f9fc4cbfddd78fc/Original%20Logo.png)
-
+![Logo](https://github.com/ClaudioRojasMon/Trayectorias_Academicas/blob/79b362cb03730b1e8f20d9116f9fc4cbfddd78fc/Original%20Logo.png)
 
 # Trayectorias Académicas
 
-**Descripción del Proyecto**:
+### Descripción del Proyecto
+
+Este proyecto es resultado de una solicitud hecha por parte de una Fundación Educacional que deseaba tener un análisis más fino de las trayectorias académicas de sus estudiantes en las asignaturas troncales y su relación con los resultados en las pruebas estandarizadas. Por lo tanto, había una ausencia de información relevante sobre el desempeño de los estudiintes en las asignaturas PSU/PDT a lo largo de su trayectoria académica. 
+
+### Estado del Proyecto
+
+El proyecto ya fue finalizado y entregado a los miembros del directorio y del equipo directivo del colegio. 
 
 
-
-
-Estado del proyecto;
-Demostración de funciones y aplicaciones;
-Acceso al Proyecto;
-Tecnologías utilizadas;
-Personas Contribuyentes;
-Personas Desarrolladoras del Proyecto;
-Licencia.
-
-Este repositorio da cuenta de un trabajo sobre las calificaciones de asignaturas troncales de las generaciones 2017 -2020 de un colegio particular pagado.
-
-Este proyecto se insertó en la discusión sobre: 
-
-a) la mejora de los resultados académicos solicitados por el Directorio del establecimiento,
-
-b) la necesidad de hacer un mejor uso de los datos de los resultados académicos que posee la institución. 
-
- **Metodología de Trabajo**: 
+### Metodología de Trabajo   
 
 *Parte I*: Construcción de un data frame con las siguientes características:
 
