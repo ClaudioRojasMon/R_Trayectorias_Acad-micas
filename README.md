@@ -10,6 +10,11 @@ Este proyecto es resultado de una solicitud hecha por parte de una Fundación Ed
 
 El proyecto ya fue finalizado y entregado a los miembros del directorio y del equipo directivo del colegio. 
 
+### Recursos Utilizados
+
+- Actas de Notas de 1° básico a IV° medio entre el 2017 - 2020.
+- Resultados PSU /PDT 2017 - 2020.
+- Programa R Studio.
 
 ### Metodología de Trabajo   
 
@@ -28,3 +33,10 @@ El proyecto ya fue finalizado y entregado a los miembros del directorio y del eq
 - Puntos con linea de tendencia.
 
 - Box plot, que se construye en función de la distribución de las notas o puntajes. Cada uno indica la mediana, la media (punto rojo) y los valores atípicos (puntos verdes). Todo lo cual, permitió analizar el comportamiento académico de los estudiantes durante los años seleccionados. 
+
+
+### Acceso al Proyecto
+
+En este caso hay que descargar la base de datos y el script que se encuentran en este respositario. Luego de ello, subir a Rstudio u o Entorno donde pueda ser ejecutado. 
+
+### Licencia 
