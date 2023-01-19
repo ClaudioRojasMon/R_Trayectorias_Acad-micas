@@ -1,4 +1,20 @@
+
+
+
 # Trayectorias Académicas
+
+**Descripción del Proyecto**:
+
+
+
+
+Estado del proyecto;
+Demostración de funciones y aplicaciones;
+Acceso al Proyecto;
+Tecnologías utilizadas;
+Personas Contribuyentes;
+Personas Desarrolladoras del Proyecto;
+Licencia.
 
 Este repositorio da cuenta de un trabajo sobre las calificaciones de asignaturas troncales de las generaciones 2017 -2020 de un colegio particular pagado.
 
