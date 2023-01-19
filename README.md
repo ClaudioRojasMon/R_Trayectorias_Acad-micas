@@ -39,4 +39,4 @@ El proyecto ya fue finalizado y entregado a los miembros del directorio y del eq
 
 En este caso hay que descargar la base de datos y el script que se encuentran en este respositario. Luego de ello, subir a Rstudio u o Entorno donde pueda ser ejecutado. 
 
-### Licencia 
+
